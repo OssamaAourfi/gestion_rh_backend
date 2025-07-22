@@ -1,0 +1,32 @@
+{# templates/conge/fiche.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; }
+        h2 { color: #2c3e50; }
+        .section { margin-bottom: 10px; }
+        .label { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Fiche de Demande de Congé</h2>
+
+    <div class="section">
+        <span class="label">Employé:</span> {{ conge.user.email }}
+    </div>
+    <div class="section">
+        <span class="label">Période:</span> du {{ conge.startDate|date('Y-m-d') }} au {{ conge.endDate|date('Y-m-d') }}
+    </div>
+    <div class="section">
+        <span class="label">Raison:</span> {{ conge.reason }}
+    </div>
+    <div class="section">
+        <span class="label">Statut:</span> {{ conge.status }}
+    </div>
+    <div class="section">
+        <span class="label">Créée le:</span> {{ conge.createdAt|date('Y-m-d H:i') }}
+    </div>
+</body>
+</html>

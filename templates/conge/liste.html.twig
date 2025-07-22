@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        h2 { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <h2>Liste des demandes de congé</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Employé</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Statut</th>
+                <th>Raison</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conge in conges %}
+                <tr>
+                    <td>{{ conge.id }}</td>
+                    <td>{{ conge.user.email }}</td>
+                    <td>{{ conge.startDate|date('Y-m-d') }}</td>
+                    <td>{{ conge.endDate|date('Y-m-d') }}</td>
+                    <td>{{ conge.status }}</td>
+                    <td>{{ conge.reason }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
