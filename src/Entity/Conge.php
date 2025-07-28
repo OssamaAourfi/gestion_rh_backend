@@ -40,7 +40,10 @@ class Conge
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
-    
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $joursRestants = null;
+
     public const STATUS_EN_ATTENTE = 'EN_ATTENTE';
     public const STATUS_VALIDEE = 'VALIDEE';
     public const STATUS_REJETEE = 'REJETEE';
@@ -58,19 +61,20 @@ class Conge
     public function setStartDate(\DateTime $startDate): static
     {
         $this->startDate = $startDate;
-
+        $this->updateJoursRestants();
         return $this;
     }
 
     public function getEndDate(): ?\DateTime
     {
+
         return $this->endDate;
     }
 
     public function setEndDate(\DateTime $endDate): static
     {
         $this->endDate = $endDate;
-
+        $this->updateJoursRestants();
         return $this;
     }
 
@@ -132,5 +136,21 @@ class Conge
         $this->user = $user;
 
         return $this;
+    }
+    public function getJoursRestants(): ?int
+    {
+        return $this->joursRestants;
+    }
+
+    public function setJoursRestants(int $joursRestants): static
+    {
+        $this->joursRestants = $joursRestants;
+        return $this;
+    }
+    private function updateJoursRestants(): void
+    {
+        if ($this->startDate && $this->endDate) {
+            $this->joursRestants = $this->startDate->diff($this->endDate)->days;
+        }
     }
 }

@@ -34,6 +34,31 @@ class Employee
     #[ORM\Column]
     private ?bool $isActive = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?string $cv = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $photo = null;
+
+    public function getCv(): ?string
+    {
+        return $this->cv;
+    }
+    public function setCv(?string $cv): self
+    {
+        $this->cv = $cv;
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
+        return $this;
+    }
     public function getId(): ?int
     {
         return $this->id;

@@ -21,8 +21,8 @@ final class CongeController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $data = json_decode($request->getContent(),true);
-        if(!isset($data['startDate'], $data['endDate'], $data['reason'])){
+        $data = json_decode($request->getContent(), true);
+        if (!isset($data['startDate'], $data['endDate'], $data['reason'])) {
             return $this->json(['message' => 'Champs manquants'], 400);
         }
         $startDate = \DateTime::createFromFormat('Y-m-d', $data['startDate']);
@@ -44,11 +44,12 @@ final class CongeController extends AbstractController
 
         return $this->json(['message' => 'Demande de congé envoyée'], Response::HTTP_CREATED);
     }
-    #[Route('', name:'conge_index', methods: ['GET'])]
+    #[Route('', name: 'conge_index', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function index(EntityManagerInterface $em): JsonResponse{
+    public function index(EntityManagerInterface $em): JsonResponse
+    {
         $user = $this->getUser();
-        $conges = $em->getRepository(Conge::class)->findBy(['user'=>$user]);
+        $conges = $em->getRepository(Conge::class)->findBy(['user' => $user]);
 
         $data = [];
         foreach ($conges as $conge) {
@@ -64,12 +65,13 @@ final class CongeController extends AbstractController
         }
         return $this->json($data);
     }
-    #[Route('/{id}/valider', name:'conger_valider', methods: ['PUT'])]
+    #[Route('/{id}/valider', name: 'conger_valider', methods: ['PUT'])]
     #[IsGranted('ROLE_MANAGER')]
-    public function valider(int $id,EntityManagerInterface $em):JsonResponse{
+    public function valider(int $id, EntityManagerInterface $em): JsonResponse
+    {
         $conge = $em->getRepository(Conge::class)->find($id);
-        if(!$conge){
-            return $this->json(['message'=>'Demande de congé non trouver'],404);
+        if (!$conge) {
+            return $this->json(['message' => 'Demande de congé non trouver'], 404);
         }
         $conge->setStatus(Conge::STATUS_VALIDEE);
         $conge->setUpdatedAt(new \DateTime());
@@ -95,7 +97,8 @@ final class CongeController extends AbstractController
     }
     #[Route('/admin/conges', name: 'admin_conges_list', methods: ['GET'])]
     #[IsGranted('ROLE_MANAGER')]
-    public function listAll(EntityManagerInterface $em,Request $request):JsonResponse{
+    public function listAll(EntityManagerInterface $em, Request $request): JsonResponse
+    {
 
         if (!$this->isGranted('ROLE_MANAGER') && !$this->isGranted('ROLE_ADMIN')) {
             return $this->json(['message' => 'Accès refusé'], 403);
@@ -119,20 +122,20 @@ final class CongeController extends AbstractController
         $conges = $em->getRepository(Conge::class)->findAll();
         $data = [];
         foreach ($conges as $conge) {
-        $data[] = [
-            'id' => $conge->getId(),
-            'startDate' => $conge->getStartDate()->format('Y-m-d'),
-            'endDate' => $conge->getEndDate()->format('Y-m-d'),
-            'reason' => $conge->getReason(),
-            'status' => $conge->getStatus(),
-            'createdAt' => $conge->getCreatedAt()->format('Y-m-d H:i'),
-            'updatedAt' => $conge->getUpdatedAt()->format('Y-m-d H:i'),
-            'user' => [
-                'id' => $conge->getUser()->getId(),
-                'email' => $conge->getUser()->getEmail(),
-            ]
-        ];
-    }
+            $data[] = [
+                'id' => $conge->getId(),
+                'startDate' => $conge->getStartDate()->format('Y-m-d'),
+                'endDate' => $conge->getEndDate()->format('Y-m-d'),
+                'reason' => $conge->getReason(),
+                'status' => $conge->getStatus(),
+                'createdAt' => $conge->getCreatedAt()->format('Y-m-d H:i'),
+                'updatedAt' => $conge->getUpdatedAt()->format('Y-m-d H:i'),
+                'user' => [
+                    'id' => $conge->getUser()->getId(),
+                    'email' => $conge->getUser()->getEmail(),
+                ]
+            ];
+        }
         return $this->json($data);
     }
 

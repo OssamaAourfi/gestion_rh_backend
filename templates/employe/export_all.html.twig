@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Employés</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            font-size: 12px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #333;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .date {
+            text-align: right;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #666;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .total {
+            margin-top: 20px;
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Liste des Employés</h1>
+    </div>
+
+    <div class="date">
+        Généré le {{ "now"|date("d/m/Y à H:i") }}
+    </div>
+
+    {% if employes is not empty %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Poste</th>
+                    <th>Date d'embauche</th>
+                    <th>Salaire</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employe in employes %}
+                    <tr>
+                        <td>{{ employe.id }}</td>
+                        <td>{{ employe.nom|default('N/A') }}</td>
+                        <td>{{ employe.prenom|default('N/A') }}</td>
+                        <td>{{ employe.email|default('N/A') }}</td>
+                        <td>{{ employe.poste|default('N/A') }}</td>
+                        <td>
+                            {% if employe.dateEmbauche %}
+                                {{ employe.dateEmbauche|date('d/m/Y') }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>{{employe.salaire}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total">
+            Total: {{ employes|length }} employé(s)
+        </div>
+    {% else %}
+        <p>Aucun employé trouvé.</p>
+    {% endif %}
+
+    <div class="footer">
+        Document généré automatiquement - {{ "now"|date("d/m/Y H:i:s") }}
+    </div>
+</body>
+</html>
